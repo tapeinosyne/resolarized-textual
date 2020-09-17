@@ -23,7 +23,7 @@ git clone https://github.com/tapeinosyne/resolarized-textual "$HOME/Library/Grou
 …
 ```
 
-You can open a Finder window directly therein by clicking this `textual://` link to the [textual://custom-styles-folder](custom styles folder).
+You can also open a Finder window directly therein by launching `textual://custom-styles-folder` from a browser.
 
 
 ## Configuration

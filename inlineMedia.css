@@ -2,6 +2,7 @@
 Variables and mixins for responsive text and a very basic spacing system
 */
 body {
+  --column-gap: 1.75rem;
   --lead-consecutive: 0.25rem;
   --lead-inconsecutive: 0.75rem;
   --copy-size: 1rem;
@@ -12,6 +13,7 @@ body {
 
 @media only screen and (max-width: 1024px) {
   body {
+    --column-gap: 1.5rem;
     --lead-consecutive: 0.25rem;
     --lead-inconsecutive: 0.5rem;
     --copy-size: 0.875rem;

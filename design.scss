@@ -70,15 +70,16 @@ message is inserted as a new `line` containing `sender`, `message` and
 .message,
 .sender {
   position: relative;
-  padding: 4px $side-pad 0 $side-pad;
 }
 
 .sender {
+  padding-top: 4px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .message {
+  padding: 4px $side-pad 0 $side-pad;
   // Set the border to 0 to allow width transitions.
   border-left: 0 solid var(--de-emph);
   hanging-punctuation: first allow-end last;
@@ -224,7 +225,7 @@ we display a marker on the first unread message.
 // from the same sender, mark the individual message.
 #mark + .text.consecutive > .message::before {
   color: var(--accent);
-  @include columnar-mark($mark-symbol);
+  @include columnar-mark($mark-symbol, 0);
 }
 
 // If the previous message is not from this sender, mark the sender and
@@ -233,14 +234,14 @@ we display a marker on the first unread message.
   margin-top: var(--lead-inconsecutive);
 
   .sender::before {
-    content: "#{$mark-symbol} ";
+    @include columnar-mark($mark-symbol, -1ch);
   }
 }
 
 .text[data-highlight="true"] {
   .message::before {
     transition: left $anim-short;
-    @include columnar-mark($mark-symbol);
+    @include columnar-mark($mark-symbol, 0);
   }
 
   &:hover .message {
@@ -257,12 +258,12 @@ we display a marker on the first unread message.
 #mark + .text.selectedUser,
 .text.selectedUser[data-highlight="true"] {
   .message::before {
-    left: calc(-#{$mark-gap} * 1.5);
+    left: -4px;
   }
 }
 
 .event[data-line-type="topic"] .message::before {
-  @include columnar-mark("§")
+  @include columnar-mark("§", -1ch);
 }
 
 .event[data-line-type="topic"]

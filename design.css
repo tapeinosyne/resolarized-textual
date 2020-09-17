@@ -14,6 +14,7 @@ html {
 Variables and mixins for responsive text and a very basic spacing system
 */
 body {
+  --column-gap: 1.75rem;
   --lead-consecutive: 0.25rem;
   --lead-inconsecutive: 0.75rem;
   --copy-size: 1rem;
@@ -24,6 +25,7 @@ body {
 
 @media only screen and (max-width: 1024px) {
   body {
+    --column-gap: 1.5rem;
     --lead-consecutive: 0.25rem;
     --lead-inconsecutive: 0.5rem;
     --copy-size: 0.875rem;
@@ -64,7 +66,7 @@ body[data-theme-lightness=light] {
     grid-template-columns: 1fr max(48rem) 1fr;
     justify-content: center;
     width: 100%;
-    column-gap: 1.25rem;
+    column-gap: var(--column-gap);
   }
 
   .event .sender,
@@ -119,7 +121,7 @@ body[data-theme-lightness=light] {
   .date_indicator span,
 .session_indicator span {
     display: inline-block;
-    margin-right: calc( (100% - 48rem - 2 * 1.25rem) / 2 - 5ch );
+    margin-right: calc( (100% - 48rem - 2 * var(--column-gap)) / 2 - 5ch );
   }
 }
 @media only screen and (max-width: 1024px) {
@@ -127,7 +129,7 @@ body[data-theme-lightness=light] {
     grid-template-columns: auto;
     align-items: start;
     justify-content: space-between;
-    column-gap: 1.5rem;
+    column-gap: var(--column-gap);
     width: 92%;
     max-width: 70ch;
   }
@@ -163,7 +165,12 @@ body[data-theme-lightness=light] {
     text-align: right;
   }
 
+  .message::before {
+    left: 0.5ch;
+  }
+
   .sender {
+    padding-left: 0.675rem;
     text-align: left;
   }
 
@@ -181,7 +188,7 @@ body[data-theme-lightness=light] {
   }
   #mark + .text:not(.consecutive) > .sender::before {
     position: absolute;
-    left: -1ch;
+    left: 0;
     content: "»";
   }
 
@@ -272,15 +279,16 @@ message is inserted as a new `line` containing `sender`, `message` and
 .message,
 .sender {
   position: relative;
-  padding: 4px 0.675rem 0 0.675rem;
 }
 
 .sender {
+  padding-top: 4px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .message {
+  padding: 4px 0.675rem 0 0.675rem;
   border-left: 0 solid var(--de-emph);
   hanging-punctuation: first allow-end last;
   transition: color 0.125s ease-in, background-color 0.25s ease-in, border 0.25s ease-in, border-radius 0.25s ease-in, padding 0.25s ease-in;
@@ -392,7 +400,7 @@ we display a marker on the first unread message.
 #mark + .text.consecutive > .message::before {
   color: var(--accent);
   position: absolute;
-  left: -1ch;
+  left: 0;
   content: "»";
 }
 
@@ -400,13 +408,15 @@ we display a marker on the first unread message.
   margin-top: var(--lead-inconsecutive);
 }
 #mark + .text:not(.consecutive) .sender::before {
-  content: "» ";
+  position: absolute;
+  left: -1ch;
+  content: "»";
 }
 
 .text[data-highlight=true] .message::before {
   transition: left 0.25s ease-in;
   position: absolute;
-  left: -1ch;
+  left: 0;
   content: "»";
 }
 .text[data-highlight=true]:hover .message {
@@ -418,7 +428,7 @@ we display a marker on the first unread message.
 
 #mark + .text.selectedUser .message::before,
 .text.selectedUser[data-highlight=true] .message::before {
-  left: calc(-1ch * 1.5);
+  left: -4px;
 }
 
 .event[data-line-type=topic] .message::before {

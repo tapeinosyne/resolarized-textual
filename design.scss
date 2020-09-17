@@ -81,6 +81,7 @@ message is inserted as a new `line` containing `sender`, `message` and
 .message {
   // Set the border to 0 to allow width transitions.
   border-left: 0 solid var(--de-emph);
+  hanging-punctuation: first allow-end last;
   transition:
     color 0.125s ease-in, background-color $anim-short,
     border $anim-short, border-radius $anim-short,

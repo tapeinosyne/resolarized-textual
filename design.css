@@ -204,6 +204,7 @@ body[data-theme-lightness=light] {
 
   .message {
     text-align: justify;
+    -webkit-hyphens: auto;
     hyphens: auto;
   }
 
@@ -281,6 +282,7 @@ message is inserted as a new `line` containing `sender`, `message` and
 
 .message {
   border-left: 0 solid var(--de-emph);
+  hanging-punctuation: first allow-end last;
   transition: color 0.125s ease-in, background-color 0.25s ease-in, border 0.25s ease-in, border-radius 0.25s ease-in, padding 0.25s ease-in;
 }
 

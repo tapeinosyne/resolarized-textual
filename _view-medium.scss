@@ -1,0 +1,64 @@
+@use 'prelude.scss' as *;
+
+@media only screen and (max-width: $view-medium) {
+  .line {
+    grid-template-columns: auto;
+    align-items: start;
+    justify-content: space-between;
+    column-gap: 1.5rem;
+    @include constrained-column-width();
+  }
+
+  .line.text {
+    display: grid;
+    grid-template-areas:
+      "s s"
+      "m t";
+    grid-template-rows: min-content;
+
+    .sender { grid-area: s; }
+    .message { grid-area: m; }
+    .time { grid-area: t; }
+  }
+
+  .line.event {
+    grid-template-areas: "m t";
+
+    .message { grid-area: m; }
+    .time { grid-area: t; }
+  }
+
+  .time {
+    width: auto;
+    padding-top: 4px;
+    text-align: right;
+  }
+
+  .sender {
+    text-align: left;
+  }
+
+  .event .sender,
+  .line.consecutive .sender {
+    display: none;
+  }
+
+  #mark + .text.consecutive {
+    margin-top: 0;
+  }
+
+  #mark + .text:not(.consecutive) > .sender {
+    overflow: visible;
+
+    &::before {
+      @include columnar-mark($mark-symbol);
+    }
+  }
+
+  .date_indicator,
+  .session_indicator {
+    display: block;
+    text-align: right;
+    @include constrained-column-width();
+  }
+}

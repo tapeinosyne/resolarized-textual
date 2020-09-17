@@ -1,0 +1,52 @@
+/*
+Variables and mixins for responsive text and a very basic spacing system
+*/
+
+$view-medium: 1024px;
+$view-small: 720px;
+
+$column-gap: 1.25rem;
+$side-pad: 0.675rem;
+$time-width: 5ch;
+
+$anim-short: 0.25s ease-in;
+$anim-mid: 0.5s ease-in;
+$anim-long: 0.8s ease;
+
+@mixin constrained-column-width {
+  width: 92%;
+  max-width: 70ch;
+}
+
+$mark-gap: 1ch;
+$mark-symbol: "»";
+@mixin columnar-mark($symbol) {
+  position: absolute;
+  left: -$mark-gap;
+  content: $symbol;
+}
+
+
+body {
+  --lead-consecutive: 0.25rem;
+  --lead-inconsecutive: 0.75rem;
+
+  --copy-size: 1rem;
+  --copy-lh: 1.6rem;
+
+  --minutiae-size: 0.75rem;
+  --minutiae-lh: 1.6rem;
+}
+
+@media only screen and (max-width: $view-medium) {
+  body {
+    --lead-consecutive: 0.25rem;
+    --lead-inconsecutive: 0.5rem;
+
+    --copy-size: 0.875rem;
+    --copy-lh: 1.4rem;
+
+    // minutiae-size: unvaried
+    --minutiae-lh: 1.4rem;
+  }
+}

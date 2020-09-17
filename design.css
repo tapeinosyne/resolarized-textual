@@ -1,0 +1,501 @@
+@charset "UTF-8";
+/* Reset */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/*
+Variables and mixins for responsive text and a very basic spacing system
+*/
+body {
+  --lead-consecutive: 0.25rem;
+  --lead-inconsecutive: 0.75rem;
+  --copy-size: 1rem;
+  --copy-lh: 1.6rem;
+  --minutiae-size: 0.75rem;
+  --minutiae-lh: 1.6rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  body {
+    --lead-consecutive: 0.25rem;
+    --lead-inconsecutive: 0.5rem;
+    --copy-size: 0.875rem;
+    --copy-lh: 1.4rem;
+    --minutiae-lh: 1.4rem;
+  }
+}
+/* The Solarized palette */
+/* Dark color scheme (default) */
+body,
+body[data-theme-lightness=dark] {
+  --bg: #002b36;
+  --bg-emph: #073642;
+  --copy: #839496;
+  --de-emph: #657b83;
+  --de-emph2: #586e75;
+  --emph: #93a1a1;
+  --emph2: #eee8d5;
+  --accent: #268bd2;
+  --highlight: #eee8d5;
+}
+
+/* Light color scheme */
+body[data-theme-lightness=light] {
+  --bg: #fdf6e3;
+  --bg-emph: #eee8d5;
+  --copy: #586e75;
+  --de-emph: #839496;
+  --de-emph2: #93a1a1;
+  --emph: #073642;
+  --emph2: #002b36;
+  --accent: #2aa198;
+  --highlight: #cb4b16;
+}
+
+@media only screen and (min-width: calc(1024px + 1px)) {
+  .line {
+    grid-template-columns: 1fr max(48rem) 1fr;
+    justify-content: center;
+    width: 100%;
+    column-gap: 1.25rem;
+  }
+
+  .event .sender,
+.line.consecutive .sender {
+    display: inline-block;
+    visibility: hidden;
+  }
+
+  .sender {
+    overflow: hidden;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: right;
+    text-overflow: ellipsis;
+  }
+
+  .time {
+    width: 5ch;
+    padding-top: 6px;
+    font-size: var(--minutiae-size);
+    line-height: var(--minutiae-lh);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .date_indicator,
+.session_indicator {
+    display: grid;
+    justify-items: end;
+    width: 100%;
+    margin-top: calc(2 * var(--lead-inconsecutive));
+    color: var(--de-emph2);
+    /*
+    A somewhat inconvenient way to right-align indicators to `time` in
+    absence of a shared grid track: set the right margin to half the
+    empty space left over by the centered message column along with the
+    gaps, thus adjoining the indicator to `time`, and further subtract
+    the width of the `time` element, thus making the right sides flush.
+
+    For a visual explanation:
+
+    1. consider the constituent elements of the full 100% width
+    | empty space | gap | centered message column | gap | time | empty space |
+    2. remove the column and gaps, as well as half the empty space
+                                                        | time | empty space |
+    3. consider the indicator's placement
+                                              indicator | time | empty space |
+    4. remove the width of `time`
+                                                     indicator | empty space |
+    */
+  }
+  .date_indicator span,
+.session_indicator span {
+    display: inline-block;
+    margin-right: calc( (100% - 48rem - 2 * 1.25rem) / 2 - 5ch );
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .line {
+    grid-template-columns: auto;
+    align-items: start;
+    justify-content: space-between;
+    column-gap: 1.5rem;
+    width: 92%;
+    max-width: 70ch;
+  }
+
+  .line.text {
+    display: grid;
+    grid-template-areas: "s s" "m t";
+    grid-template-rows: min-content;
+  }
+  .line.text .sender {
+    grid-area: s;
+  }
+  .line.text .message {
+    grid-area: m;
+  }
+  .line.text .time {
+    grid-area: t;
+  }
+
+  .line.event {
+    grid-template-areas: "m t";
+  }
+  .line.event .message {
+    grid-area: m;
+  }
+  .line.event .time {
+    grid-area: t;
+  }
+
+  .time {
+    width: auto;
+    padding-top: 4px;
+    text-align: right;
+  }
+
+  .sender {
+    text-align: left;
+  }
+
+  .event .sender,
+.line.consecutive .sender {
+    display: none;
+  }
+
+  #mark + .text.consecutive {
+    margin-top: 0;
+  }
+
+  #mark + .text:not(.consecutive) > .sender {
+    overflow: visible;
+  }
+  #mark + .text:not(.consecutive) > .sender::before {
+    position: absolute;
+    left: -1ch;
+    content: "»";
+  }
+
+  .date_indicator,
+.session_indicator {
+    display: block;
+    text-align: right;
+    width: 92%;
+    max-width: 70ch;
+  }
+}
+@media only screen and (max-width: 720px) {
+  .line.text {
+    grid-template-areas: "s t" "m m";
+    grid-template-columns: 1fr max-content;
+  }
+  .line.text.consecutive > .time {
+    display: none;
+  }
+
+  .message {
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .time,
+.date_indicator,
+.session_indicator {
+    padding-right: 0.675rem;
+  }
+}
+body {
+  display: grid;
+  align-content: start;
+  justify-content: stretch;
+  row-gap: 1rem;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  color: var(--copy);
+  font-size: 100%;
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-word;
+  background-color: var(--bg);
+}
+
+#body {
+  width: 100%;
+  max-height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+/* Base layout and styling for buffer & lines
+
+The `messageBuffer` acts as an outer message container. Each individual
+message is inserted as a new `line` containing `sender`, `message` and
+`time` elements; events are the same, but with an empty `sender`.
+*/
+#messageBuffer {
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  margin: var(--copy-size);
+}
+
+.line {
+  display: grid;
+  font-size: var(--copy-size);
+  line-height: var(--copy-lh);
+}
+
+.line + .line:not(.consecutive) {
+  margin-top: var(--lead-inconsecutive);
+}
+
+.message,
+.sender,
+.time {
+  display: inline-block;
+  border-radius: 4px;
+  transition: color 0.25s ease-in;
+}
+
+.message,
+.sender {
+  position: relative;
+  padding: 4px 0.675rem 0 0.675rem;
+}
+
+.sender {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.message {
+  border-left: 0 solid var(--de-emph);
+  transition: color 0.125s ease-in, background-color 0.25s ease-in, border 0.25s ease-in, border-radius 0.25s ease-in, padding 0.25s ease-in;
+}
+
+.time,
+.event {
+  color: var(--de-emph2);
+}
+
+/*
+  contextual styles and colors
+*/
+a, span.channel {
+  color: #268bd2;
+  cursor: pointer;
+  transition: color 0.25s ease-in;
+}
+a:hover, span.channel:hover {
+  color: #2aa198;
+}
+
+span.inlineSender {
+  color: var(--accent);
+}
+span.inlineSender:hover {
+  cursor: pointer;
+}
+
+.text[data-line-type=privmsg] .sender,
+.text[data-line-type=action] .sender {
+  color: var(--accent);
+}
+.text[data-line-type=privmsg] .sender[data-member-type=myself],
+.text[data-line-type=action] .sender[data-member-type=myself] {
+  color: var(--de-emph);
+}
+
+.line[data-line-type=action] .message,
+.line[data-line-type=action] .sender {
+  font-style: italic;
+}
+
+.event[data-line-type=topic] .message,
+body[data-view-type=server] .event .message {
+  color: var(--copy);
+}
+
+.line[data-command=notice] .sender {
+  color: var(--highlight);
+}
+.line[data-command=notice] .message {
+  color: var(--emph);
+}
+
+/*
+  hover and hover-on-sibling-message effects
+*/
+.text:hover .message,
+body[data-view-type=server] .line:hover .message {
+  color: var(--emph);
+  background-color: var(--bg-emph);
+}
+.text:hover .time,
+body[data-view-type=server] .line:hover .time {
+  color: var(--copy);
+}
+
+.text:hover .sender,
+.text.hover-on-sibling .sender,
+.text.hover-on-sibling .sender {
+  color: var(--highlight);
+}
+.text:hover .sender[data-member-type=myself],
+.text.hover-on-sibling .sender[data-member-type=myself],
+.text.hover-on-sibling .sender[data-member-type=myself] {
+  color: var(--emph2);
+}
+
+/*
+  user selection and highlighting
+*/
+.text.selectedUser .sender,
+.text.selectedUser .sender[data-member-type=myself] {
+  color: var(--highlight);
+}
+.text.selectedUser .message {
+  padding-left: calc(0.675rem - 1px);
+  color: var(--emph);
+  border-left: 1px solid var(--de-emph);
+  border-radius: 0 4px 4px 0;
+}
+.text.selectedUser .time {
+  color: var(--copy);
+}
+.text.selectedUser:hover .message {
+  color: var(--emph2);
+}
+.text.selectedUser:hover .time {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Message markers
+
+For unread messages, rather than displaying `#mark` itself as set by Textual,
+we display a marker on the first unread message.
+*/
+#mark + .text.consecutive > .message::before {
+  color: var(--accent);
+  position: absolute;
+  left: -1ch;
+  content: "»";
+}
+
+#mark + .text:not(.consecutive) {
+  margin-top: var(--lead-inconsecutive);
+}
+#mark + .text:not(.consecutive) .sender::before {
+  content: "» ";
+}
+
+.text[data-highlight=true] .message::before {
+  transition: left 0.25s ease-in;
+  position: absolute;
+  left: -1ch;
+  content: "»";
+}
+.text[data-highlight=true]:hover .message {
+  color: var(--emph2);
+}
+.text[data-highlight=true]:hover .time {
+  color: var(--emph);
+}
+
+#mark + .text.selectedUser .message::before,
+.text.selectedUser[data-highlight=true] .message::before {
+  left: calc(-1ch * 1.5);
+}
+
+.event[data-line-type=topic] .message::before {
+  position: absolute;
+  left: -1ch;
+  content: "§";
+}
+
+.event[data-line-type=topic] + .event[data-line-type=topic] .message::before {
+  display: none;
+}
+
+/* Message buffer date and session indicators
+
+Note that the session indicator is currently unused.
+*/
+.date_indicator,
+.session_indicator {
+  margin-top: var(--lead-inconsecutive);
+  margin-bottom: var(--lead-inconsecutive);
+  color: var(--de-emph2);
+  font-size: var(--copy-size);
+}
+.date_indicator span,
+.session_indicator span {
+  display: inline-block;
+  font-size: var(--minutiae-size);
+  font-style: italic;
+  line-height: var(--minutiae-lh);
+}
+
+/* History (hidden scrollback) loading animation
+
+Theoretically, an indicator that appears when the users scrolls back to
+messages that have been unloaded from the view; practically, it appears
+unused by Textual.
+*/
+.message_buffer_loading_indicator {
+  height: calc(1.5 * var(--copy-size));
+  text-align: center;
+}
+.message_buffer_loading_indicator span {
+  color: var(--emph);
+  font-size: calc(1.5 * var(--copy-size));
+  line-height: calc(1.5 * var(--copy-size));
+  animation: ellipsis-period 1s infinite;
+}
+.message_buffer_loading_indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+.message_buffer_loading_indicator span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.message_buffer_loading_indicator span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes ellipsis-period {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+/* Disused
+
+Of dubious practical utility, these elements are baldly removed from view.
+TODO: style them and allow users to override `display: none`.
+*/
+#loadingScreen {
+  display: none;
+}
+
+#topicBar {
+  display: none;
+}
+
+/*# sourceMappingURL=design.css.map */

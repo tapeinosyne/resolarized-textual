@@ -1,0 +1,69 @@
+@use 'prelude.scss' as *;
+
+@media only screen and (min-width: calc(#{$view-medium} + 1px)) {
+  .line {
+    grid-template-columns: 1fr max(48rem) 1fr;
+    justify-content: center;
+    width: 100%;
+    column-gap: $column-gap;
+  }
+
+  // Retain an empty sender element for the purpose of layout, but
+  // ensure it is hidden from view.
+  .event .sender,
+  .line.consecutive .sender {
+    display: inline-block;
+    visibility: hidden;
+  }
+
+  .sender {
+    overflow: hidden;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: right;
+    text-overflow: ellipsis;
+  }
+
+  .time {
+    width: $time-width;
+    padding-top: 6px;
+    font-size: var(--minutiae-size);
+    line-height: var(--minutiae-lh);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .date_indicator,
+  .session_indicator {
+    display: grid;
+    justify-items: end;
+    width: 100%;
+    margin-top: calc(2 * var(--lead-inconsecutive));
+    color: var(--de-emph2);
+
+    /*
+    A somewhat inconvenient way to right-align indicators to `time` in
+    absence of a shared grid track: set the right margin to half the
+    empty space left over by the centered message column along with the
+    gaps, thus adjoining the indicator to `time`, and further subtract
+    the width of the `time` element, thus making the right sides flush.
+
+    For a visual explanation:
+
+    1. consider the constituent elements of the full 100% width
+    | empty space | gap | centered message column | gap | time | empty space |
+    2. remove the column and gaps, as well as half the empty space
+                                                        | time | empty space |
+    3. consider the indicator's placement
+                                              indicator | time | empty space |
+    4. remove the width of `time`
+                                                     indicator | empty space |
+    */
+    span {
+      display: inline-block;
+      margin-right: calc(
+        (100% - 48rem - 2 * #{$column-gap}) / 2 - #{$time-width}
+      );
+    }
+  }
+}

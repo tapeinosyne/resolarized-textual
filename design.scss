@@ -1,0 +1,338 @@
+@use 'reset.scss';
+@use 'prelude.scss' as *;
+@use 'palette.scss' as *;
+@use 'view-large.scss';
+@use 'view-medium.scss';
+@use 'view-small.scss';
+
+
+body {
+  display: grid;
+  align-content: start;
+  justify-content: stretch;
+  row-gap: 1rem;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  color: var(--copy);
+  font-size: 100%;
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-word;
+  background-color: var(--bg);
+}
+
+// Note: body opacity is set to `1` via JavaScript upon view load.
+//
+// Refer to `Textual.fadeOutLoadingScreen`, which is called back from
+// `Textual.viewBodyDidLoad` in `script.js`.
+#body {
+  width: 100%;
+  max-height: 100%;
+  opacity: 0;
+  transition: opacity $anim-mid;
+}
+
+
+/* Base layout and styling for buffer & lines
+
+The `messageBuffer` acts as an outer message container. Each individual
+message is inserted as a new `line` containing `sender`, `message` and
+`time` elements; events are the same, but with an empty `sender`.
+*/
+
+#messageBuffer {
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  margin: var(--copy-size);
+}
+
+.line {
+  display: grid;
+  font-size: var(--copy-size);
+  line-height: var(--copy-lh);
+}
+
+.line + .line:not(.consecutive) {
+  margin-top: var(--lead-inconsecutive);
+}
+
+.message,
+.sender,
+.time {
+  display: inline-block;
+  border-radius: 4px;
+  transition: color $anim-short;
+}
+
+.message,
+.sender {
+  position: relative;
+  padding: 4px $side-pad 0 $side-pad;
+}
+
+.sender {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.message {
+  // Set the border to 0 to allow width transitions.
+  border-left: 0 solid var(--de-emph);
+  transition:
+    color 0.125s ease-in, background-color $anim-short,
+    border $anim-short, border-radius $anim-short,
+    padding $anim-short;
+}
+
+.time,
+.event {
+  color: var(--de-emph2);
+}
+
+
+/*
+  contextual styles and colors
+*/
+
+a, span.channel {
+  color: $blue;
+  cursor: pointer;
+  transition: color $anim-short;
+
+  &:hover {
+    color: $cyan;
+  }
+}
+
+span.inlineSender {
+  color: var(--accent);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.text[data-line-type="privmsg"],
+.text[data-line-type="action"] {
+  .sender {
+    color: var(--accent);
+  }
+
+  .sender[data-member-type="myself"] {
+    color: var(--de-emph);
+  }
+}
+
+.line[data-line-type="action"] .message,
+.line[data-line-type="action"] .sender {
+  font-style: italic;
+}
+
+.event[data-line-type="topic"],
+body[data-view-type="server"] .event  {
+  .message {
+    color: var(--copy);
+  }
+}
+
+.line[data-command="notice"] {
+  .sender {
+    color: var(--highlight);
+  }
+
+  .message {
+    color: var(--emph);
+  }
+}
+
+
+/*
+  hover and hover-on-sibling-message effects
+*/
+
+.text:hover,
+body[data-view-type="server"] .line:hover {
+  .message {
+    color: var(--emph);
+    background-color: var(--bg-emph);
+  }
+
+  .time {
+    color: var(--copy);
+  }
+}
+
+.text:hover,
+.text.hover-on-sibling,
+.text.hover-on-sibling {
+  .sender {
+    color: var(--highlight);
+  }
+
+  .sender[data-member-type="myself"] {
+    color: var(--emph2);
+  }
+}
+
+
+/*
+  user selection and highlighting
+*/
+
+.text.selectedUser {
+  .sender,
+  .sender[data-member-type="myself"] {
+    color: var(--highlight);
+  }
+
+  .message {
+    // Compensate for the border to prevent text from sliding right. (So
+    // much for "just use `border-box`".)
+    padding-left: calc(#{$side-pad} - 1px);
+    color: var(--emph);
+    border-left: 1px solid var(--de-emph);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .time {
+    color: var(--copy);
+  }
+
+  &:hover .message {
+    color: var(--emph2);
+  }
+
+  &:hover .time {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+}
+
+
+/* Message markers
+
+For unread messages, rather than displaying `#mark` itself as set by Textual,
+we display a marker on the first unread message.
+*/
+
+// If the first unread message is immediately preceded by other messages
+// from the same sender, mark the individual message.
+#mark + .text.consecutive > .message::before {
+  color: var(--accent);
+  @include columnar-mark($mark-symbol);
+}
+
+// If the previous message is not from this sender, mark the sender and
+// add the usual margin.
+#mark + .text:not(.consecutive) {
+  margin-top: var(--lead-inconsecutive);
+
+  .sender::before {
+    content: "#{$mark-symbol} ";
+  }
+}
+
+.text[data-highlight="true"] {
+  .message::before {
+    transition: left $anim-short;
+    @include columnar-mark($mark-symbol);
+  }
+
+  &:hover .message {
+    color: var(--emph2);
+  }
+
+  &:hover .time {
+    color: var(--emph);
+  }
+}
+
+// When a user is selected, a left border is displayed. Slide any marker
+// away for better spacing and to prevent unsightly overlaps.
+#mark + .text.selectedUser,
+.text.selectedUser[data-highlight="true"] {
+  .message::before {
+    left: calc(-#{$mark-gap} * 1.5);
+  }
+}
+
+.event[data-line-type="topic"] .message::before {
+  @include columnar-mark("§")
+}
+
+.event[data-line-type="topic"]
++ .event[data-line-type="topic"] .message::before {
+  display: none;
+}
+
+
+/* Message buffer date and session indicators
+
+Note that the session indicator is currently unused.
+*/
+
+.date_indicator,
+.session_indicator {
+  margin-top: var(--lead-inconsecutive);
+  margin-bottom: var(--lead-inconsecutive);
+  color: var(--de-emph2);
+  font-size: var(--copy-size);  // used by `ch` width constraints
+
+  span {
+    display: inline-block;
+    font-size: var(--minutiae-size);
+    font-style: italic;
+    line-height: var(--minutiae-lh);
+  }
+}
+
+
+/* History (hidden scrollback) loading animation
+
+Theoretically, an indicator that appears when the users scrolls back to
+messages that have been unloaded from the view; practically, it appears
+unused by Textual.
+*/
+
+.message_buffer_loading_indicator {
+  height: calc(1.5 * var(--copy-size));
+  text-align: center;
+
+  span {
+    color: var(--emph);
+    font-size: calc(1.5 * var(--copy-size));
+    line-height: calc(1.5 * var(--copy-size));
+    animation: ellipsis-period 1s infinite;
+
+    &:nth-child(1) { animation-delay: 0s; }
+    &:nth-child(2) { animation-delay: 0.1s; }
+    &:nth-child(3) { animation-delay: 0.2s; }
+  }
+}
+
+@keyframes ellipsis-period {
+  0%   { opacity: 0.2; }
+  20%  { opacity: 1.0; }
+  100% { opacity: 0.2; }
+}
+
+
+/* Disused
+
+Of dubious practical utility, these elements are baldly removed from view.
+TODO: style them and allow users to override `display: none`.
+*/
+
+// Just fade in the message buffer.
+#loadingScreen {
+  display: none;
+}
+
+// Just use /topic.
+#topicBar {
+  display: none;
+}

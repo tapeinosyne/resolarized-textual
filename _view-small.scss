@@ -1,0 +1,27 @@
+@use 'prelude.scss' as *;
+
+@media only screen and (max-width: $view-small) {
+  .line.text {
+    grid-template-areas:
+      "s t"
+      "m m";
+    grid-template-columns: 1fr max-content;
+
+    &.consecutive > .time {
+      display: none;
+    }
+  }
+
+  .message {
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  // Align to the edge of the side-padded `message` text rather than
+  // the outer edge of `message` itself.
+  .time,
+  .date_indicator,
+  .session_indicator {
+    padding-right: $side-pad;
+  }
+}

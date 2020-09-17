@@ -1,0 +1,38 @@
+{
+  "private": true,
+  "name": "resolarized",
+  "version": "0.1.0",
+  "description": "A minimal, responsive Solarized theme for the Textual IRC client.",
+  "main": "scripts.js",
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "stylelint": "^13.7.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-order": "^4.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Alas, there is nary a test.\" && exit 1"
+  },
+  "author": "tapeinosyne",
+  "license": "ISC",
+  "stylelint": {
+    "plugins": [
+      "stylelint-order"
+    ],
+    "extends": [
+      "stylelint-config-rational-order"
+    ],
+    "rules": {
+      "selector-no-qualifying-type": [
+        true,
+        {
+          "ignore": [
+            "attribute",
+            "class",
+            "id"
+          ]
+        }
+      ]
+    }
+  }
+}

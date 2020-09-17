@@ -1,0 +1,39 @@
+@use 'prelude.scss' as *;
+@use 'palette.scss' as *;
+
+img {
+  border: 0;
+}
+
+video, img {
+  display: inline-block;
+}
+
+/* TODO
+This is all *utterly* unseen and untested.
+*/
+
+.inlineImage .content,
+.inlineVideo .content,
+.inlineVideoService .content,
+.inlineHTML .content {
+	display: inline-block;
+	max-width: calc(100% - 2 * $side-pad);
+	margin: var(--lead-consecutive) auto;
+}
+
+.inlineImage .closeButton,
+.inlineVideo .closeButton,
+.inlineVideoService .closeButton,
+.inlineHTML .closeButton {
+	display: inline-block;
+	width: calc(var(--copy-size) + 2px);
+	height: calc(var(--copy-size) + 2px);
+	padding-right: $side-pad;
+	color: var(--de-emph);
+	font-size: var(--copy-size);
+	line-height: var(--copy-size);
+	border: 1px solid var(--de-emph);
+	border-radius: 4px;
+	cursor: pointer;
+}

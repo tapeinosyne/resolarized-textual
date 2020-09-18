@@ -3,7 +3,6 @@
 @media only screen and (max-width: $view-medium) {
   .line {
     grid-template-columns: auto;
-    align-items: start;
     justify-content: space-between;
     column-gap: var(--column-gap);
     @include constrained-column-width();
@@ -30,7 +29,6 @@
 
   .time {
     width: auto;
-    padding-top: 4px;
     text-align: right;
   }
 

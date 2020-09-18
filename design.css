@@ -85,7 +85,6 @@ body[data-theme-lightness=light] {
 
   .time {
     width: 5ch;
-    padding-top: 6px;
     font-size: var(--minutiae-size);
     line-height: var(--minutiae-lh);
     white-space: nowrap;
@@ -127,7 +126,6 @@ body[data-theme-lightness=light] {
 @media only screen and (max-width: 1024px) {
   .line {
     grid-template-columns: auto;
-    align-items: start;
     justify-content: space-between;
     column-gap: var(--column-gap);
     width: 92%;
@@ -161,7 +159,6 @@ body[data-theme-lightness=light] {
 
   .time {
     width: auto;
-    padding-top: 4px;
     text-align: right;
   }
 
@@ -260,6 +257,7 @@ message is inserted as a new `line` containing `sender`, `message` and
 
 .line {
   display: grid;
+  align-items: first baseline;
   font-size: var(--copy-size);
   line-height: var(--copy-lh);
 }
@@ -282,7 +280,6 @@ message is inserted as a new `line` containing `sender`, `message` and
 }
 
 .sender {
-  padding-top: 4px;
   font-weight: 600;
   cursor: pointer;
 }

@@ -51,6 +51,7 @@ message is inserted as a new `line` containing `sender`, `message` and
 
 .line {
   display: grid;
+  align-items: first baseline;
   font-size: var(--copy-size);
   line-height: var(--copy-lh);
 }
@@ -73,7 +74,6 @@ message is inserted as a new `line` containing `sender`, `message` and
 }
 
 .sender {
-  padding-top: 4px;
   font-weight: 600;
   cursor: pointer;
 }

@@ -5,7 +5,7 @@
     grid-template-columns: 1fr max(48rem) 1fr;
     justify-content: center;
     width: 100%;
-    column-gap: $column-gap;
+    column-gap: var(--column-gap);
   }
 
   // Retain an empty sender element for the purpose of layout, but
@@ -62,7 +62,7 @@
     span {
       display: inline-block;
       margin-right: calc(
-        (100% - 48rem - 2 * #{$column-gap}) / 2 - #{$time-width}
+        (100% - 48rem - 2 * var(--column-gap)) / 2 - #{$time-width}
       );
     }
   }

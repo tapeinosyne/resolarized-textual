@@ -5,8 +5,7 @@ Variables and mixins for responsive text and a very basic spacing system
 $view-medium: 1024px;
 $view-small: 720px;
 
-$column-gap: 1.25rem;
-$side-pad: 0.675rem;
+$side-pad: 0.625rem;
 $time-width: 5ch;
 
 $anim-short: 0.25s ease-in;
@@ -18,16 +17,17 @@ $anim-long: 0.8s ease;
   max-width: 70ch;
 }
 
-$mark-gap: 1ch;
 $mark-symbol: "»";
-@mixin columnar-mark($symbol) {
+@mixin columnar-mark($symbol, $gap) {
   position: absolute;
-  left: -$mark-gap;
+  left: #{$gap};
   content: $symbol;
 }
 
 
 body {
+  --column-gap: 1.75rem;
+
   --lead-consecutive: 0.25rem;
   --lead-inconsecutive: 0.75rem;
 
@@ -40,6 +40,8 @@ body {
 
 @media only screen and (max-width: $view-medium) {
   body {
+    --column-gap: 1.5rem;
+
     --lead-consecutive: 0.25rem;
     --lead-inconsecutive: 0.5rem;
 

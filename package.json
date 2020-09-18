@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "resolarized",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A minimal, responsive Solarized theme for the Textual IRC client.",
   "main": "scripts.js",
   "devDependencies": {

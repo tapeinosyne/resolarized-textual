@@ -77,7 +77,6 @@ body[data-theme-lightness=light] {
 
   .sender {
     overflow: hidden;
-    font-weight: 600;
     white-space: nowrap;
     text-align: right;
     text-overflow: ellipsis;
@@ -129,7 +128,7 @@ body[data-theme-lightness=light] {
     justify-content: space-between;
     column-gap: var(--column-gap);
     width: 92%;
-    max-width: 70ch;
+    max-width: 72ch;
   }
 
   .line.text {
@@ -162,12 +161,8 @@ body[data-theme-lightness=light] {
     text-align: right;
   }
 
-  .message::before {
-    left: 0.5ch;
-  }
-
   .sender {
-    padding-left: 0.675rem;
+    padding-left: 0.625rem;
     text-align: left;
   }
 
@@ -185,7 +180,7 @@ body[data-theme-lightness=light] {
   }
   #mark + .text:not(.consecutive) > .sender::before {
     position: absolute;
-    left: 0;
+    left: -1.2ch;
     content: "»";
   }
 
@@ -194,7 +189,7 @@ body[data-theme-lightness=light] {
     display: block;
     text-align: right;
     width: 92%;
-    max-width: 70ch;
+    max-width: 72ch;
   }
 }
 @media only screen and (max-width: 720px) {
@@ -215,7 +210,7 @@ body[data-theme-lightness=light] {
   .time,
 .date_indicator,
 .session_indicator {
-    padding-right: 0.675rem;
+    padding-right: 0.625rem;
   }
 }
 body {
@@ -280,12 +275,12 @@ message is inserted as a new `line` containing `sender`, `message` and
 }
 
 .sender {
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .message {
-  padding: 4px 0.675rem 0 0.675rem;
+  padding: 4px 0.625rem 0 0.625rem;
   border-left: 0 solid var(--de-emph);
   hanging-punctuation: first allow-end last;
   transition: color 0.125s ease-in, background-color 0.25s ease-in, border 0.25s ease-in, border-radius 0.25s ease-in, padding 0.25s ease-in;
@@ -373,7 +368,7 @@ body[data-view-type=server] .line:hover .time {
   color: var(--highlight);
 }
 .text.selectedUser .message {
-  padding-left: calc(0.675rem - 1px);
+  padding-left: calc(0.625rem - 1px);
   color: var(--emph);
   border-left: 1px solid var(--de-emph);
   border-radius: 0 4px 4px 0;
@@ -396,6 +391,7 @@ we display a marker on the first unread message.
 */
 #mark + .text.consecutive > .message::before {
   color: var(--accent);
+  transition: left 0.25s ease-in;
   position: absolute;
   left: 0;
   content: "»";
@@ -405,9 +401,7 @@ we display a marker on the first unread message.
   margin-top: var(--lead-inconsecutive);
 }
 #mark + .text:not(.consecutive) .sender::before {
-  position: absolute;
-  left: -1ch;
-  content: "»";
+  content: "» ";
 }
 
 .text[data-highlight=true] .message::before {
@@ -430,7 +424,7 @@ we display a marker on the first unread message.
 
 .event[data-line-type=topic] .message::before {
   position: absolute;
-  left: -1ch;
+  left: -1.2ch;
   content: "§";
 }
 

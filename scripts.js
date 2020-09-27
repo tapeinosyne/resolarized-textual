@@ -5,85 +5,85 @@ Resolarized
 'use strict';
 
 const Resolarized = {
-	consecutiveClass: "consecutive",
+  consecutiveClass: "consecutive",
 
-	getPreviousLine(line) {
-		let previousLine = line.previousElementSibling;
-		if (previousLine && previousLine.id === "mark") {
-			previousLine = previousLine.previousElementSibling;
-		}
+  getPreviousLine(line) {
+    let previousLine = line.previousElementSibling;
+    if (previousLine && previousLine.id === "mark") {
+      previousLine = previousLine.previousElementSibling;
+    }
 
-		if (previousLine &&
-			previousLine.classList &&
-			previousLine.classList.contains("line")
-		) { return previousLine; }
-		else { return null; }
-	},
+    if (previousLine &&
+      previousLine.classList &&
+      previousLine.classList.contains("line")
+    ) { return previousLine; }
+    else { return null; }
+  },
 
-	getSenderElement(line) {
-		return line ? line.querySelector(".sender") : null;
-	},
+  getSenderElement(line) {
+    return line ? line.querySelector(".sender") : null;
+  },
 
-	getSenderNickname(line) {
-		const sender = Resolarized.getSenderElement(line);
-		return sender ? sender.dataset.nickname : null;
-	},
+  getSenderNickname(line) {
+    const sender = Resolarized.getSenderElement(line);
+    return sender ? sender.dataset.nickname : null;
+  },
 
-	handleConsecutiveMessages(current, previous) {
-		const previousSender = Resolarized.getSenderNickname(previous);
-		const currentSender = Resolarized.getSenderNickname(current);
+  handleConsecutiveMessages(current, previous) {
+    const previousSender = Resolarized.getSenderNickname(previous);
+    const currentSender = Resolarized.getSenderNickname(current);
 
-		if (currentSender === null || previousSender === null) {
-			return;
-		}
+    if (currentSender === null || previousSender === null) {
+      return;
+    }
 
-		const consecutive = currentSender === previousSender;
-		const firstConsecutive = consecutive && !previous.classList.contains(Resolarized.consecutiveClass);
+    const consecutive = currentSender === previousSender;
+    const firstConsecutive = consecutive && !previous.classList.contains(Resolarized.consecutiveClass);
 
-		if (consecutive) {
-			const anchorId = firstConsecutive ? previous.id : previous.dataset.resolarizedAnchor;
+    if (consecutive) {
+      const anchorId = firstConsecutive ? previous.id : previous.dataset.resolarizedAnchor;
 
-			current.dataset.resolarizedAnchor = anchorId;
-			current.classList.add(Resolarized.consecutiveClass);
+      current.dataset.resolarizedAnchor = anchorId;
+      current.classList.add(Resolarized.consecutiveClass);
 
-			Resolarized.linkHoverToSender(current);
-		}
-	},
+      Resolarized.linkHoverToSender(current);
+    }
+  },
 
-	linkHoverToSender(line) {
-		const remoteHoverClass = "hover-on-sibling";
+  linkHoverToSender(line) {
+    const remoteHoverClass = "hover-on-sibling";
 
-		line.addEventListener("mouseover", () => {
-			const visibleSenderId = line.dataset.resolarizedAnchor;
-			let senderDisplay = document.getElementById(visibleSenderId);
-			if (senderDisplay) {
-				senderDisplay.classList.add(remoteHoverClass);
-			}
-		}, { passive: true });
+    line.addEventListener("mouseover", () => {
+      const visibleSenderId = line.dataset.resolarizedAnchor;
+      let senderDisplay = document.getElementById(visibleSenderId);
+      if (senderDisplay) {
+        senderDisplay.classList.add(remoteHoverClass);
+      }
+    }, { passive: true });
 
-		line.addEventListener("mouseleave", () => {
-			const visibleSenderId = line.dataset.resolarizedAnchor;
-			let senderDisplay = document.getElementById(visibleSenderId);
-			if (senderDisplay) {
-				senderDisplay.classList.remove(remoteHoverClass);
-			}
-		}, { passive: true });
-	},
+    line.addEventListener("mouseleave", () => {
+      const visibleSenderId = line.dataset.resolarizedAnchor;
+      let senderDisplay = document.getElementById(visibleSenderId);
+      if (senderDisplay) {
+        senderDisplay.classList.remove(remoteHoverClass);
+      }
+    }, { passive: true });
+  },
 
-	setLightness(lightness) {
-		const body = document.body;
-		switch (lightness) {
-			case "light": {
-				body.dataset.themeLightness = "light";
-				break;
-			}
-			case "dark": {
-				body.dataset.themeLightness = "dark";
-				break;
-			}
-			default: delete body.dataset.themeLightness;
-		}
-	},
+  setLightness(lightness) {
+    const body = document.body;
+    switch (lightness) {
+      case "light": {
+        body.dataset.themeLightness = "light";
+        break;
+      }
+      case "dark": {
+        body.dataset.themeLightness = "dark";
+        break;
+      }
+      default: delete body.dataset.themeLightness;
+    }
+  },
 };
 
 /*
@@ -103,25 +103,25 @@ This solely affects full theme reload, which only happens when users
 change style settings or during development.
 */
 Textual.viewBodyDidLoad = () => {
-	app.appearance(lightness => {
-		Resolarized.setLightness(lightness);
-	});
+  app.appearance(lightness => {
+    Resolarized.setLightness(lightness);
+  });
 
-	Textual.fadeOutLoadingScreen(1.0, 1.0);
+  Textual.fadeOutLoadingScreen(1.0, 1.0);
 };
 
 Textual.appearanceDidChange =
-	(lightness) => Resolarized.setLightness(lightness);
+  (lightness) => Resolarized.setLightness(lightness);
 
 Textual.nicknameSingleClicked =
-	(e) => ConversationTracking.nicknameSingleClickEventCallback(e);
+  (e) => ConversationTracking.nicknameSingleClickEventCallback(e);
 
 Textual.messageAddedToView = (lineNumber) => {
-	const currentLine = document.getElementById("line-" + lineNumber);
-	const previousLine = Resolarized.getPreviousLine(currentLine);
-	if (currentLine && previousLine) {
-		Resolarized.handleConsecutiveMessages(currentLine, previousLine);
-	}
+  const currentLine = document.getElementById("line-" + lineNumber);
+  const previousLine = Resolarized.getPreviousLine(currentLine);
+  if (currentLine && previousLine) {
+    Resolarized.handleConsecutiveMessages(currentLine, previousLine);
+  }
 
-	ConversationTracking.updateNicknameWithNewMessage(currentLine);
+  ConversationTracking.updateNicknameWithNewMessage(currentLine);
 };

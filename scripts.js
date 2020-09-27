@@ -88,16 +88,18 @@ const Resolarized = {
 
 /*
 Textual API calls
+
+Defined in: "Textual.app -> Contents -> Resources -> JavaScript -> API -> core.js"
 */
 
 /* ESLint Configuration */
 /* global app, Textual, ConversationTracking */
-/* Defined in: "Textual.app -> Contents -> Resources -> JavaScript -> API -> core.js" */
 
-/* WONTFIX (not worth the effort): The `lightness` setting comes into
-effect too late: there is always a flash of the default color scheme
-(dark) before the view switches over to the appropriate one. Moreover,
-there is no color or opacity transition.
+/* WONTFIX (most likely)
+The `lightness` setting comes into effect too
+late: there is always a flash of the default color scheme (dark) before
+the view switches over to the appropriate one. Moreover, there is no
+color or opacity transition.
 
 This solely affects full theme reload, which only happens when users
 change style settings or during development.

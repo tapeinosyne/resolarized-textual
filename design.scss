@@ -150,6 +150,10 @@ body[data-view-type="server"] .event  {
   }
 }
 
+body:not([data-view-type="server"]) .event[data-line-type="debug"] {
+  display: none;
+}
+
 
 /*
   hover and hover-on-sibling-message effects
